@@ -111,7 +111,78 @@
         </div>
       </header>
 
-      <section class="summary-carousel" aria-label="Tổng quan tài chính">
+      <!-- Chỉ hiển thị trong chế độ tài chính nhóm -->
+      <section class="group-workspace-bar hidden" id="groupWorkspaceBar" aria-label="Nhóm tài chính">
+        <div class="group-tabs-shell">
+          <div class="group-tabs" id="groupTabs" role="tablist" aria-label="Các nhóm đã tham gia"></div>
+
+          <button
+            class="group-tab-add"
+            id="addGroupTabBtn"
+            type="button"
+            aria-label="Thêm nhóm"
+            title="Thêm nhóm"
+          >
+            <i data-lucide="plus"></i>
+          </button>
+        </div>
+
+        <div class="group-manage-wrap">
+          <button class="group-manage-btn" id="groupManageBtn" type="button">
+            <i data-lucide="settings-2"></i>
+            <span>Quản lý nhóm</span>
+            <i data-lucide="chevron-down" class="group-manage-chevron"></i>
+          </button>
+
+          <div class="group-manage-menu hidden" id="groupManageMenu">
+            <button type="button" data-group-action="create">
+              <i data-lucide="plus-circle"></i>
+              <span>Thêm nhóm</span>
+            </button>
+
+            <button type="button" data-group-action="join">
+              <i data-lucide="log-in"></i>
+              <span>Tham gia nhóm</span>
+            </button>
+
+            <button type="button" data-group-action="search">
+              <i data-lucide="search"></i>
+              <span>Tìm kiếm nhóm</span>
+            </button>
+
+            <div class="group-menu-divider"></div>
+
+            <button type="button" data-group-action="members" data-requires-group>
+              <i data-lucide="users"></i>
+              <span>Thành viên nhóm</span>
+            </button>
+
+            <button type="button" data-group-action="rename" data-requires-owner>
+              <i data-lucide="pencil"></i>
+              <span>Đổi tên nhóm</span>
+            </button>
+
+            <button type="button" data-group-action="copy-code" data-requires-group>
+              <i data-lucide="copy"></i>
+              <span>Sao chép mã nhóm</span>
+            </button>
+
+            <div class="group-menu-divider"></div>
+
+            <button class="danger-menu-item" type="button" data-group-action="leave" data-requires-member>
+              <i data-lucide="log-out"></i>
+              <span>Rời nhóm</span>
+            </button>
+
+            <button class="danger-menu-item" type="button" data-group-action="delete" data-requires-owner>
+              <i data-lucide="trash-2"></i>
+              <span>Xóa nhóm</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="summary-carousel" id="summaryCarousel" aria-label="Tổng quan tài chính">
         <button class="summary-scroll-btn prev hidden" id="summaryPrevBtn" type="button" aria-label="Xem thẻ trước">
           <i data-lucide="chevron-left"></i>
         </button>
@@ -181,7 +252,7 @@
         </button>
       </section>
 
-      <section class="content-grid">
+      <section class="content-grid" id="personalAnalyticsSection">
         <article class="panel chart-panel">
           <div class="panel-header">
             <div>
@@ -216,11 +287,64 @@
         </article>
       </section>
 
-      <section class="panel transaction-panel">
+      <!-- Thay cho biểu đồ khi đang ở chế độ Nhóm -->
+      <section class="panel group-list-panel hidden" id="groupListSection">
+        <div class="panel-header group-list-header">
+          <div>
+            <p class="eyebrow">Không gian nhóm</p>
+            <h3>Nhóm đã tham gia</h3>
+            <p class="group-list-subtitle">
+              Chọn một nhóm để xem số dư, thu chi và các giao dịch chung.
+            </p>
+          </div>
+
+          <div class="group-list-actions">
+            <div class="search-box group-search-box">
+              <i data-lucide="search"></i>
+              <input
+                type="search"
+                id="joinedGroupSearchInput"
+                placeholder="Tìm trong nhóm của tôi..."
+              />
+            </div>
+
+            <button class="secondary-btn" id="groupListCreateBtn" type="button">
+              <i data-lucide="plus"></i>
+              Tạo nhóm
+            </button>
+          </div>
+        </div>
+
+        <div class="group-card-grid" id="groupCardGrid"></div>
+
+        <div class="group-empty-state hidden" id="groupEmptyState">
+          <div class="group-empty-icon">
+            <i data-lucide="users-round"></i>
+          </div>
+          <h4>Bạn chưa tham gia nhóm nào</h4>
+          <p>
+            Tạo nhóm mới để quản lý chi tiêu chung hoặc tham gia bằng mã mời.
+          </p>
+
+          <div class="group-empty-actions">
+            <button class="primary-btn" id="emptyCreateGroupBtn" type="button">
+              <i data-lucide="plus"></i>
+              Tạo nhóm đầu tiên
+            </button>
+
+            <button class="secondary-btn" id="emptyJoinGroupBtn" type="button">
+              <i data-lucide="log-in"></i>
+              Tham gia nhóm
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel transaction-panel" id="transactionPanel">
         <div class="panel-header transaction-header">
           <div>
-            <p class="eyebrow">Hoạt động gần đây</p>
-            <h3>Giao dịch</h3>
+            <p class="eyebrow" id="transactionEyebrow">Hoạt động gần đây</p>
+            <h3 id="transactionPanelTitle">Giao dịch</h3>
           </div>
 
           <div class="transaction-tools">
@@ -361,6 +485,29 @@
         </div>
       </form>
     </div>
+  </div>
+
+  <!-- Modal dùng chung cho thao tác nhóm -->
+  <div class="modal-backdrop hidden" id="groupActionModal">
+    <div class="modal-card group-action-modal-card">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow" id="groupModalEyebrow">Quản lý nhóm</p>
+          <h3 id="groupModalTitle">Nhóm</h3>
+        </div>
+
+        <button class="icon-btn" id="closeGroupModalBtn" type="button" aria-label="Đóng">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div id="groupModalBody"></div>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="appToast" role="status" aria-live="polite">
+    <i data-lucide="circle-check"></i>
+    <span id="appToastText"></span>
   </div>
 
   <script type="module" src="./js/main.js"></script>

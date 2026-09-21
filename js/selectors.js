@@ -49,12 +49,12 @@ export function getSummaryData(monthlyBudget) {
     .filter((item) => item.type === "expense")
     .reduce((sum, item) => sum + Number(item.amount), 0);
 
+  const safeBudget = Math.max(Number(monthlyBudget) || 0, 0);
   const balance = income - expense;
-  const budgetRemain = Math.max(monthlyBudget - expense, 0);
-  const budgetPercent = Math.min(
-    Math.round((expense / monthlyBudget) * 100),
-    100
-  );
+  const budgetRemain = Math.max(safeBudget - expense, 0);
+  const budgetPercent = safeBudget > 0
+    ? Math.min(Math.round((expense / safeBudget) * 100), 100)
+    : 0;
 
   return {
     income,

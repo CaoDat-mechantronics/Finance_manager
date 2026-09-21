@@ -4,23 +4,36 @@ import {
   saveTransactionsToStorage,
 } from "./storageService.js";
 
-/**
- * Tầng dữ liệu giao dịch.
- * `mode` nhận "personal" hoặc "group" để tách riêng hai phạm vi dữ liệu.
- */
 async function getAuthHeaders() {
   return {
     "Content-Type": "application/json",
   };
 }
 
-export async function getTransactions(mode = "personal") {
+function buildGroupQuery(mode, groupId) {
+  const params = new URLSearchParams({ scope: mode });
+
+  if (mode === "group" && groupId) {
+    params.set("group_id", groupId);
+  }
+
+  return params.toString();
+}
+
+export async function getTransactions(
+  mode = "personal",
+  groupId = null
+) {
+  if (mode === "group" && !groupId) {
+    return [];
+  }
+
   if (APP_CONFIG.useLocalDemo) {
-    return loadTransactionsFromStorage(mode);
+    return loadTransactionsFromStorage(mode, groupId);
   }
 
   const response = await fetch(
-    `${APP_CONFIG.apiBaseUrl}/transactions?scope=${encodeURIComponent(mode)}`,
+    `${APP_CONFIG.apiBaseUrl}/transactions?${buildGroupQuery(mode, groupId)}`,
     { headers: await getAuthHeaders() }
   );
 
@@ -34,11 +47,16 @@ export async function getTransactions(mode = "personal") {
 export async function createTransaction(
   transaction,
   currentTransactions,
-  mode = "personal"
+  mode = "personal",
+  groupId = null
 ) {
+  if (mode === "group" && !groupId) {
+    throw new Error("Chưa chọn nhóm");
+  }
+
   if (APP_CONFIG.useLocalDemo) {
     const updated = [...currentTransactions, transaction];
-    saveTransactionsToStorage(updated, mode);
+    saveTransactionsToStorage(updated, mode, groupId);
     return transaction;
   }
 
@@ -47,7 +65,11 @@ export async function createTransaction(
     {
       method: "POST",
       headers: await getAuthHeaders(),
-      body: JSON.stringify({ ...transaction, scope: mode }),
+      body: JSON.stringify({
+        ...transaction,
+        scope: mode,
+        group_id: mode === "group" ? groupId : null,
+      }),
     }
   );
 
@@ -61,16 +83,22 @@ export async function createTransaction(
 export async function deleteTransaction(
   id,
   currentTransactions,
-  mode = "personal"
+  mode = "personal",
+  groupId = null
 ) {
   if (APP_CONFIG.useLocalDemo) {
-    const updated = currentTransactions.filter((item) => item.id !== id);
-    saveTransactionsToStorage(updated, mode);
+    const updated = currentTransactions.filter(
+      (item) => item.id !== id
+    );
+
+    saveTransactionsToStorage(updated, mode, groupId);
     return;
   }
 
+  const query = buildGroupQuery(mode, groupId);
+
   const response = await fetch(
-    `${APP_CONFIG.apiBaseUrl}/transactions/${id}?scope=${encodeURIComponent(mode)}`,
+    `${APP_CONFIG.apiBaseUrl}/transactions/${id}?${query}`,
     {
       method: "DELETE",
       headers: await getAuthHeaders(),

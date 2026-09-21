@@ -1,20 +1,31 @@
 import { initializeApp } from "./appController.js";
-import { bindSidebarEvents, closeSidebar } from "./ui/sidebar.js";
+import {
+  bindSidebarEvents,
+  closeSidebar,
+} from "./ui/sidebar.js";
 import {
   bindModalEvents,
   closeTransactionModal,
 } from "./ui/modal.js";
-import { bindSummaryScrollerEvents } from "./ui/summaryScroller.js";
+import {
+  bindSummaryScrollerEvents,
+} from "./ui/summaryScroller.js";
+import {
+  bindGroupModalEvents,
+  closeGroupModal,
+} from "./ui/groupModal.js";
 import { refreshIcons } from "./utils.js";
 
 async function bootstrap() {
   bindSidebarEvents();
   bindModalEvents();
+  bindGroupModalEvents();
   bindSummaryScrollerEvents();
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       closeTransactionModal();
+      closeGroupModal();
       closeSidebar();
     }
   });
@@ -24,7 +35,10 @@ async function bootstrap() {
   try {
     await initializeApp();
   } catch (error) {
-    console.error("Khởi tạo ứng dụng thất bại:", error);
+    console.error(
+      "Khởi tạo ứng dụng thất bại:",
+      error
+    );
     alert("Không thể khởi tạo ứng dụng.");
   }
 }

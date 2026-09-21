@@ -6,6 +6,35 @@ export const els = {
   financeModeSwitch: document.getElementById("financeModeSwitch"),
   financeModeButtons: document.querySelectorAll("[data-finance-mode]"),
 
+  groupWorkspaceBar: document.getElementById("groupWorkspaceBar"),
+  groupTabs: document.getElementById("groupTabs"),
+  addGroupTabBtn: document.getElementById("addGroupTabBtn"),
+  groupManageBtn: document.getElementById("groupManageBtn"),
+  groupManageMenu: document.getElementById("groupManageMenu"),
+
+  groupListSection: document.getElementById("groupListSection"),
+  groupCardGrid: document.getElementById("groupCardGrid"),
+  groupEmptyState: document.getElementById("groupEmptyState"),
+  joinedGroupSearchInput: document.getElementById("joinedGroupSearchInput"),
+  groupListCreateBtn: document.getElementById("groupListCreateBtn"),
+  emptyCreateGroupBtn: document.getElementById("emptyCreateGroupBtn"),
+  emptyJoinGroupBtn: document.getElementById("emptyJoinGroupBtn"),
+
+  personalAnalyticsSection: document.getElementById("personalAnalyticsSection"),
+  summaryCarousel: document.getElementById("summaryCarousel"),
+  transactionPanel: document.getElementById("transactionPanel"),
+  transactionEyebrow: document.getElementById("transactionEyebrow"),
+  transactionPanelTitle: document.getElementById("transactionPanelTitle"),
+
+  groupActionModal: document.getElementById("groupActionModal"),
+  closeGroupModalBtn: document.getElementById("closeGroupModalBtn"),
+  groupModalEyebrow: document.getElementById("groupModalEyebrow"),
+  groupModalTitle: document.getElementById("groupModalTitle"),
+  groupModalBody: document.getElementById("groupModalBody"),
+
+  appToast: document.getElementById("appToast"),
+  appToastText: document.getElementById("appToastText"),
+
   openTransactionBtn: document.getElementById("openTransactionBtn"),
   mobileAddBtn: document.getElementById("mobileAddBtn"),
 

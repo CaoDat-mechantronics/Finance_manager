@@ -1,13 +1,30 @@
 import { APP_CONFIG } from "../config.js";
 
-function getContextStorageKey(mode) {
-  return `${APP_CONFIG.financeContextStorageKey}_${mode}`;
+function getContextStorageKey(mode, groupId = null) {
+  if (mode === "group") {
+    return `${APP_CONFIG.financeContextStorageKey}_group_${groupId || "none"}`;
+  }
+
+  return `${APP_CONFIG.financeContextStorageKey}_personal`;
 }
 
-export async function getFinanceContext(mode = "personal") {
+export async function getFinanceContext(
+  mode = "personal",
+  groupId = null
+) {
+  if (mode === "group" && !groupId) {
+    return { debtTotal: 0 };
+  }
+
   if (!APP_CONFIG.useLocalDemo) {
+    const params = new URLSearchParams({ scope: mode });
+
+    if (mode === "group") {
+      params.set("group_id", groupId);
+    }
+
     const response = await fetch(
-      `${APP_CONFIG.apiBaseUrl}/finance-context?scope=${encodeURIComponent(mode)}`
+      `${APP_CONFIG.apiBaseUrl}/finance-context?${params.toString()}`
     );
 
     if (!response.ok) {
@@ -17,29 +34,48 @@ export async function getFinanceContext(mode = "personal") {
     return response.json();
   }
 
-  const key = getContextStorageKey(mode);
+  const key = getContextStorageKey(mode, groupId);
   const saved = localStorage.getItem(key);
 
   if (saved) {
     try {
       const data = JSON.parse(saved);
-      return { debtTotal: Number(data.debtTotal) || 0 };
+      return {
+        debtTotal: Number(data.debtTotal) || 0,
+      };
     } catch (error) {
       console.warn("Không đọc được finance context:", error);
     }
   }
 
   const context = {
-    debtTotal: Number(APP_CONFIG.demoDebtByMode?.[mode]) || 0,
+    debtTotal:
+      mode === "group"
+        ? 0
+        : Number(APP_CONFIG.demoDebtByMode?.personal) || 0,
   };
 
   localStorage.setItem(key, JSON.stringify(context));
   return context;
 }
 
-export function saveDebtTotalToStorage(mode, debtTotal) {
+export function saveDebtTotalToStorage(
+  mode,
+  debtTotal,
+  groupId = null
+) {
   localStorage.setItem(
-    getContextStorageKey(mode),
-    JSON.stringify({ debtTotal: Math.max(Number(debtTotal) || 0, 0) })
+    getContextStorageKey(mode, groupId),
+    JSON.stringify({
+      debtTotal: Math.max(Number(debtTotal) || 0, 0),
+    })
+  );
+}
+
+export function removeGroupFinanceContext(groupId) {
+  if (!groupId) return;
+
+  localStorage.removeItem(
+    getContextStorageKey("group", groupId)
   );
 }
