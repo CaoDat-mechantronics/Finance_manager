@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Quản lý chi tiêu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-icon">
+          <i data-lucide="wallet-cards"></i>
+        </div>
+        <div>
+          <h1>Money Flow</h1>
+          <span>Quản lý chi tiêu</span>
+        </div>
+      </div>
+
+      <nav class="side-nav">
+        <button class="nav-item active" data-view="dashboard">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Tổng quan</span>
+        </button>
+
+        <button class="nav-item" data-view="transactions">
+          <i data-lucide="receipt-text"></i>
+          <span>Giao dịch</span>
+        </button>
+
+        <button class="nav-item" data-view="budget">
+          <i data-lucide="target"></i>
+          <span>Ngân sách</span>
+        </button>
+
+        <button class="nav-item" data-view="reports">
+          <i data-lucide="chart-no-axes-combined"></i>
+          <span>Báo cáo</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <button class="nav-item">
+          <i data-lucide="settings"></i>
+          <span>Cài đặt</span>
+        </button>
+
+        <div class="profile-card">
+          <div class="avatar">NA</div>
+          <div class="profile-info">
+            <strong>Thành Đạt</strong>
+            <span>thanhdat@example.com</span>
+          </div>
+          <button class="icon-btn" aria-label="Đăng xuất">
+            <i data-lucide="log-out"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-btn" id="menuBtn" aria-label="Mở menu">
+            <i data-lucide="menu"></i>
+          </button>
+
+          <div>
+            <p class="eyebrow">Tháng hiện tại</p>
+            <h2>Xin chào, Thành Đạt 👋</h2>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <label class="month-picker">
+            <i data-lucide="calendar-days"></i>
+            <input type="month" id="monthFilter" />
+          </label>
+
+          <button class="primary-btn" id="openTransactionBtn">
+            <i data-lucide="plus"></i>
+            <span>Thêm giao dịch</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="summary-grid">
+        <article class="summary-card balance">
+          <div class="card-title-row">
+            <span>Số dư hiện tại</span>
+            <div class="summary-icon">
+              <i data-lucide="wallet"></i>
+            </div>
+          </div>
+          <strong id="balanceValue">0 ₫</strong>
+          <small id="balanceHint">Thu trừ chi trong tháng</small>
+        </article>
+
+        <article class="summary-card income">
+          <div class="card-title-row">
+            <span>Tổng thu</span>
+            <div class="summary-icon">
+              <i data-lucide="trending-up"></i>
+            </div>
+          </div>
+          <strong id="incomeValue">0 ₫</strong>
+          <small>Thu nhập trong tháng</small>
+        </article>
+
+        <article class="summary-card expense">
+          <div class="card-title-row">
+            <span>Tổng chi</span>
+            <div class="summary-icon">
+              <i data-lucide="trending-down"></i>
+            </div>
+          </div>
+          <strong id="expenseValue">0 ₫</strong>
+          <small>Chi tiêu trong tháng</small>
+        </article>
+
+        <article class="summary-card budget">
+          <div class="card-title-row">
+            <span>Ngân sách còn lại</span>
+            <div class="summary-icon">
+              <i data-lucide="piggy-bank"></i>
+            </div>
+          </div>
+          <strong id="budgetRemainValue">0 ₫</strong>
+          <div class="budget-progress">
+            <div class="budget-progress-bar" id="budgetProgress"></div>
+          </div>
+          <small id="budgetText">0% ngân sách đã dùng</small>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel chart-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Phân tích</p>
+              <h3>Thu và chi</h3>
+            </div>
+
+            <select id="chartRange" class="soft-select">
+              <option value="6">6 tháng gần nhất</option>
+              <option value="12">12 tháng gần nhất</option>
+            </select>
+          </div>
+
+          <div class="chart-wrap">
+            <canvas id="cashFlowChart"></canvas>
+          </div>
+        </article>
+
+        <article class="panel category-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Cơ cấu</p>
+              <h3>Chi theo danh mục</h3>
+            </div>
+          </div>
+
+          <div class="doughnut-wrap">
+            <canvas id="categoryChart"></canvas>
+          </div>
+
+          <div class="category-legend" id="categoryLegend"></div>
+        </article>
+      </section>
+
+      <section class="panel transaction-panel">
+        <div class="panel-header transaction-header">
+          <div>
+            <p class="eyebrow">Hoạt động gần đây</p>
+            <h3>Giao dịch</h3>
+          </div>
+
+          <div class="transaction-tools">
+            <div class="search-box">
+              <i data-lucide="search"></i>
+              <input type="search" id="searchInput" placeholder="Tìm giao dịch..." />
+            </div>
+
+            <select id="typeFilter" class="soft-select">
+              <option value="all">Tất cả</option>
+              <option value="expense">Khoản chi</option>
+              <option value="income">Khoản thu</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="transaction-list" id="transactionList"></div>
+
+        <div class="empty-state hidden" id="emptyState">
+          <div class="empty-icon">
+            <i data-lucide="inbox"></i>
+          </div>
+          <h4>Chưa có giao dịch phù hợp</h4>
+          <p>Hãy thử đổi bộ lọc hoặc thêm giao dịch mới.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <button class="mobile-add-btn" id="mobileAddBtn" aria-label="Thêm giao dịch">
+    <i data-lucide="plus"></i>
+  </button>
+
+  <nav class="bottom-nav">
+    <button class="bottom-nav-item active">
+      <i data-lucide="house"></i>
+      <span>Tổng quan</span>
+    </button>
+    <button class="bottom-nav-item">
+      <i data-lucide="receipt-text"></i>
+      <span>Giao dịch</span>
+    </button>
+    <span class="bottom-nav-spacer"></span>
+    <button class="bottom-nav-item">
+      <i data-lucide="chart-pie"></i>
+      <span>Báo cáo</span>
+    </button>
+    <button class="bottom-nav-item">
+      <i data-lucide="user-round"></i>
+      <span>Tài khoản</span>
+    </button>
+  </nav>
+
+  <div class="modal-backdrop hidden" id="transactionModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">Giao dịch mới</p>
+          <h3>Thêm thu / chi</h3>
+        </div>
+
+        <button class="icon-btn" id="closeModalBtn" aria-label="Đóng">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <form id="transactionForm">
+        <div class="type-toggle">
+          <label class="type-option expense-option">
+            <input type="radio" name="type" value="expense" checked />
+            <span>
+              <i data-lucide="arrow-down-left"></i>
+              Khoản chi
+            </span>
+          </label>
+
+          <label class="type-option income-option">
+            <input type="radio" name="type" value="income" />
+            <span>
+              <i data-lucide="arrow-up-right"></i>
+              Khoản thu
+            </span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label for="amountInput">Số tiền</label>
+          <div class="amount-field">
+            <input
+              type="number"
+              id="amountInput"
+              min="1000"
+              step="1000"
+              required
+              placeholder="Ví dụ: 50000"
+            />
+            <span>₫</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="categoryInput">Danh mục</label>
+            <select id="categoryInput" required>
+              <option value="food">Ăn uống</option>
+              <option value="transport">Di chuyển</option>
+              <option value="shopping">Mua sắm</option>
+              <option value="bills">Hóa đơn</option>
+              <option value="entertainment">Giải trí</option>
+              <option value="salary">Lương</option>
+              <option value="other">Khác</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="dateInput">Ngày</label>
+            <input type="date" id="dateInput" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="descriptionInput">Nội dung</label>
+          <input
+            type="text"
+            id="descriptionInput"
+            maxlength="100"
+            required
+            placeholder="Ví dụ: Ăn trưa"
+          />
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="secondary-btn" id="cancelBtn">Hủy</button>
+          <button type="submit" class="primary-btn">
+            <i data-lucide="save"></i>
+            Lưu giao dịch
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
