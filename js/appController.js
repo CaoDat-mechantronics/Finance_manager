@@ -335,6 +335,14 @@ async function handleGroupMenuAction(action) {
       });
       break;
 
+    case "show-group-list":
+      els.groupListSection?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      showToast("Đã chuyển tới danh sách nhóm");
+      break;
+
     case "members":
       if (activeGroup) {
         openMembersModal(activeGroup);

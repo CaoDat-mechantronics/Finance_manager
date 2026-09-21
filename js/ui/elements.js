@@ -8,6 +8,8 @@ export const els = {
 
   groupWorkspaceBar: document.getElementById("groupWorkspaceBar"),
   groupTabs: document.getElementById("groupTabs"),
+  groupTabsPrevBtn: document.getElementById("groupTabsPrevBtn"),
+  groupTabsNextBtn: document.getElementById("groupTabsNextBtn"),
   addGroupTabBtn: document.getElementById("addGroupTabBtn"),
   groupManageBtn: document.getElementById("groupManageBtn"),
   groupManageMenu: document.getElementById("groupManageMenu"),

@@ -114,7 +114,19 @@
       <!-- Chỉ hiển thị trong chế độ tài chính nhóm -->
       <section class="group-workspace-bar hidden" id="groupWorkspaceBar" aria-label="Nhóm tài chính">
         <div class="group-tabs-shell">
-          <div class="group-tabs" id="groupTabs" role="tablist" aria-label="Các nhóm đã tham gia"></div>
+          <button
+            class="group-tabs-scroll-btn hidden"
+            id="groupTabsPrevBtn"
+            type="button"
+            aria-label="Xem nhóm phía trước"
+            title="Xem nhóm phía trước"
+          >
+            <i data-lucide="chevron-left"></i>
+          </button>
+
+          <div class="group-tabs-viewport">
+            <div class="group-tabs" id="groupTabs" role="tablist" aria-label="Các nhóm đã tham gia"></div>
+          </div>
 
           <button
             class="group-tab-add"
@@ -124,6 +136,16 @@
             title="Thêm nhóm"
           >
             <i data-lucide="plus"></i>
+          </button>
+
+          <button
+            class="group-tabs-scroll-btn hidden"
+            id="groupTabsNextBtn"
+            type="button"
+            aria-label="Xem nhóm phía sau"
+            title="Xem nhóm phía sau"
+          >
+            <i data-lucide="chevron-right"></i>
           </button>
         </div>
 
@@ -148,6 +170,11 @@
             <button type="button" data-group-action="search">
               <i data-lucide="search"></i>
               <span>Tìm kiếm nhóm</span>
+            </button>
+
+            <button type="button" data-group-action="show-group-list">
+              <i data-lucide="list"></i>
+              <span>Hiện danh sách nhóm</span>
             </button>
 
             <div class="group-menu-divider"></div>

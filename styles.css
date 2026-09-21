@@ -2137,3 +2137,69 @@ select:focus-visible {
     gap: 12px;
   }
 }
+
+
+/* =========================================================
+   GROUP TAB SCROLLER - v5
+   ========================================================= */
+
+.group-tabs-shell {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.group-tabs-viewport {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.group-tabs {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  padding: 1px;
+}
+
+.group-tabs-scroll-btn {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  color: #666d79;
+  transition: 0.18s ease;
+}
+
+.group-tabs-scroll-btn:hover:not(:disabled) {
+  background: #f4f6f8;
+  color: var(--text);
+}
+
+.group-tabs-scroll-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.group-tabs-scroll-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 680px) {
+  .group-tabs-scroll-btn {
+    width: 32px;
+    height: 32px;
+  }
+}

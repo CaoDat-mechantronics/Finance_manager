@@ -5,6 +5,7 @@ import {
   refreshIcons,
 } from "../utils.js";
 import { els } from "./elements.js";
+import { updateGroupTabScrollerControls } from "./groupTabScroller.js";
 
 let bound = false;
 let callbacks = {};
@@ -127,6 +128,8 @@ export function renderGroupWorkspace() {
   }
 
   renderGroupTabs(groups, activeGroupId);
+  updateGroupTabScrollerControls();
+
   renderGroupCards(
     groups,
     activeGroupId,

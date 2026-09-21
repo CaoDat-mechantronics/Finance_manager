@@ -11,6 +11,9 @@ import {
   bindSummaryScrollerEvents,
 } from "./ui/summaryScroller.js";
 import {
+  bindGroupTabScrollerEvents,
+} from "./ui/groupTabScroller.js";
+import {
   bindGroupModalEvents,
   closeGroupModal,
 } from "./ui/groupModal.js";
@@ -21,6 +24,7 @@ async function bootstrap() {
   bindModalEvents();
   bindGroupModalEvents();
   bindSummaryScrollerEvents();
+  bindGroupTabScrollerEvents();
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
