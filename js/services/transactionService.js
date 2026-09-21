@@ -55,8 +55,22 @@ export async function createTransaction(
   }
 
   if (APP_CONFIG.useLocalDemo) {
-    const updated = [...currentTransactions, transaction];
-    saveTransactionsToStorage(updated, mode, groupId);
+    // Luôn đọc dữ liệu theo đúng scope/group đích.
+    // Điều này đặc biệt quan trọng khi người dùng đổi "Nhóm"
+    // ngay trong modal trước khi lưu giao dịch.
+    const existing = loadTransactionsFromStorage(
+      mode,
+      groupId
+    );
+
+    const updated = [...existing, transaction];
+
+    saveTransactionsToStorage(
+      updated,
+      mode,
+      groupId
+    );
+
     return transaction;
   }
 

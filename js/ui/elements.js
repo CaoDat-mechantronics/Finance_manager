@@ -48,6 +48,10 @@ export const els = {
   descriptionInput: document.getElementById("descriptionInput"),
   dateInput: document.getElementById("dateInput"),
 
+  groupTransactionFields: document.getElementById("groupTransactionFields"),
+  spenderInput: document.getElementById("spenderInput"),
+  transactionGroupInput: document.getElementById("transactionGroupInput"),
+
   monthFilter: document.getElementById("monthFilter"),
   chartRange: document.getElementById("chartRange"),
   typeFilter: document.getElementById("typeFilter"),

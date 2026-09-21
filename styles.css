@@ -2082,3 +2082,58 @@ select:focus-visible {
     padding: 14px;
   }
 }
+
+
+/* =========================================================
+   GROUP TRANSACTION CONTEXT - v4
+   ========================================================= */
+
+.group-transaction-fields {
+  margin: 2px 0 16px;
+  padding: 13px;
+  border: 1px solid #e4e7ec;
+  border-radius: 14px;
+  background: #f8f9fb;
+}
+
+.group-transaction-context {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #626a78;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.055em;
+}
+
+.group-transaction-context svg {
+  width: 15px;
+  height: 15px;
+  color: #4e5968;
+}
+
+.group-context-row {
+  gap: 10px;
+}
+
+.group-transaction-fields .form-group {
+  margin-bottom: 0;
+}
+
+.group-transaction-fields select {
+  background-color: #fff;
+  font-weight: 600;
+}
+
+@media (max-width: 680px) {
+  .group-transaction-fields {
+    padding: 12px;
+  }
+
+  .group-context-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}

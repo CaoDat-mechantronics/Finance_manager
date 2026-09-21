@@ -25,7 +25,14 @@ function transactionTemplate(item) {
 
         <div class="transaction-main-text">
           <strong>${escapeHtml(item.description)}</strong>
-          <span>${formatDate(item.date)}</span>
+          <span>
+            ${formatDate(item.date)}
+            ${
+              item.spenderName
+                ? ` · Người chi: ${escapeHtml(item.spenderName)}`
+                : ""
+            }
+          </span>
         </div>
       </div>
 

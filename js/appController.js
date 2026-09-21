@@ -40,6 +40,7 @@ import { currentMonthValue } from "./utils.js";
 import { els } from "./ui/elements.js";
 import {
   closeTransactionModal,
+  getTransactionGroupFormContext,
 } from "./ui/modal.js";
 import {
   renderFinanceMode,
@@ -449,12 +450,43 @@ async function handleCreateTransaction(event) {
     financeMode,
     transactions,
     activeGroupId,
+    groups,
   } = getState();
 
   if (financeMode === "group" && !activeGroupId) {
     alert("Hãy tạo hoặc chọn một nhóm trước.");
     return;
   }
+
+  const groupContext =
+    financeMode === "group"
+      ? getTransactionGroupFormContext()
+      : null;
+
+  const targetGroupId =
+    financeMode === "group"
+      ? groupContext?.groupId
+      : null;
+
+  if (financeMode === "group" && !targetGroupId) {
+    alert("Vui lòng chọn nhóm cho giao dịch.");
+    return;
+  }
+
+  if (
+    financeMode === "group" &&
+    !groupContext?.spenderId
+  ) {
+    alert("Vui lòng chọn người chi tiêu.");
+    return;
+  }
+
+  const targetGroup =
+    financeMode === "group"
+      ? groups.find(
+          (group) => group.id === targetGroupId
+        )
+      : null;
 
   const transaction = {
     id: crypto.randomUUID(),
@@ -463,6 +495,20 @@ async function handleCreateTransaction(event) {
     category: els.categoryInput.value,
     description: els.descriptionInput.value.trim(),
     date: els.dateInput.value,
+
+    // Metadata dành cho giao dịch nhóm.
+    ...(financeMode === "group"
+      ? {
+          groupId: targetGroupId,
+          groupName:
+            groupContext?.groupName ||
+            targetGroup?.name ||
+            "",
+          spenderId: groupContext?.spenderId,
+          spenderName:
+            groupContext?.spenderName || "",
+        }
+      : {}),
   };
 
   try {
@@ -470,10 +516,8 @@ async function handleCreateTransaction(event) {
       transaction,
       transactions,
       financeMode,
-      activeGroupId
+      targetGroupId
     );
-
-    addTransaction(transaction);
 
     const transactionMonth =
       transaction.date.slice(0, 7);
@@ -481,8 +525,32 @@ async function handleCreateTransaction(event) {
     els.monthFilter.value = transactionMonth;
     setSelectedMonth(transactionMonth);
 
+    if (financeMode === "group") {
+      // Nếu người dùng đổi nhóm ngay trong form,
+      // sau khi lưu giao dịch giao diện cũng chuyển
+      // sang nhóm đó để họ nhìn thấy giao dịch vừa tạo.
+      if (targetGroupId !== activeGroupId) {
+        setActiveGroupId(targetGroupId);
+        saveLastActiveGroupId(targetGroupId);
+      }
+
+      await loadActiveGroupData(targetGroupId);
+    } else {
+      addTransaction(transaction);
+    }
+
     closeTransactionModal();
     renderAll();
+
+    if (financeMode === "group") {
+      showToast(
+        `Đã thêm giao dịch vào "${
+          targetGroup?.name ||
+          groupContext?.groupName ||
+          "nhóm"
+        }"`
+      );
+    }
   } catch (error) {
     console.error(error);
     alert("Không thể lưu giao dịch.");

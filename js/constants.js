@@ -1,3 +1,8 @@
+export const CURRENT_USER = {
+  id: "me",
+  name: "Thành Đạt",
+};
+
 export const CATEGORIES = {
   food: {
     label: "Ăn uống",

@@ -445,6 +445,30 @@
           </div>
         </div>
 
+        <!-- Chỉ hiện khi đang quản lý tài chính nhóm -->
+        <div class="group-transaction-fields hidden" id="groupTransactionFields">
+          <div class="group-transaction-context">
+            <i data-lucide="users-round"></i>
+            <span>Thông tin giao dịch nhóm</span>
+          </div>
+
+          <div class="form-row group-context-row">
+            <div class="form-group">
+              <label for="spenderInput">Người chi tiêu</label>
+              <select id="spenderInput">
+                <option value="">Chọn người chi tiêu</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="transactionGroupInput">Nhóm</label>
+              <select id="transactionGroupInput">
+                <option value="">Chọn nhóm</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
         <div class="form-row">
           <div class="form-group">
             <label for="categoryInput">Danh mục</label>
