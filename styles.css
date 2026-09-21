@@ -1110,3 +1110,194 @@ select:focus-visible {
     width: 100%;
   }
 }
+
+/* ===== Finance mode switch ===== */
+.finance-mode-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: var(--surface);
+}
+
+.finance-mode-btn {
+  height: 34px;
+  padding: 0 11px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  transition: 0.2s ease;
+}
+
+.finance-mode-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.finance-mode-btn:hover {
+  color: var(--text);
+  background: #f4f5f7;
+}
+
+.finance-mode-btn.active {
+  color: #fff;
+  background: var(--primary);
+  box-shadow: 0 4px 12px rgba(20, 24, 31, 0.16);
+}
+
+/* ===== Summary horizontal slider ===== */
+.summary-carousel {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.summary-carousel .summary-grid {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  cursor: grab;
+  padding: 1px;
+}
+
+.summary-carousel .summary-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.summary-carousel .summary-grid.dragging {
+  cursor: grabbing;
+  scroll-behavior: auto;
+  user-select: none;
+}
+
+.summary-carousel .summary-card {
+  flex: 0 0 calc((100% - 48px) / 4);
+  min-width: 230px;
+  scroll-snap-align: start;
+}
+
+.summary-card.debt .summary-icon {
+  color: var(--blue);
+  background: var(--blue-soft);
+}
+
+.summary-card.debt strong {
+  color: #244fae;
+}
+
+.summary-scroll-btn {
+  position: absolute;
+  top: 50%;
+  z-index: 5;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  transform: translateY(-50%);
+  box-shadow: 0 8px 22px rgba(23, 25, 29, 0.12);
+  backdrop-filter: blur(8px);
+}
+
+.summary-scroll-btn svg {
+  width: 17px;
+  height: 17px;
+}
+
+.summary-scroll-btn.prev {
+  left: -13px;
+}
+
+.summary-scroll-btn.next {
+  right: -13px;
+}
+
+.summary-scroll-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+@media (max-width: 1180px) {
+  .summary-carousel .summary-card {
+    flex-basis: calc((100% - 16px) / 2);
+    min-width: 260px;
+  }
+}
+
+@media (max-width: 900px) {
+  .topbar {
+    flex-wrap: wrap;
+  }
+
+  .topbar-actions {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 680px) {
+  .topbar-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .finance-mode-switch {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .finance-mode-btn {
+    flex: 1;
+    padding-inline: 8px;
+  }
+
+  .summary-carousel {
+    margin-inline: -14px;
+  }
+
+  .summary-carousel .summary-grid {
+    gap: 10px;
+    padding: 1px 14px 4px;
+    scroll-padding-left: 14px;
+  }
+
+  .summary-carousel .summary-card {
+    flex-basis: min(78vw, 300px);
+    min-width: min(78vw, 300px);
+  }
+
+  .summary-scroll-btn {
+    display: none !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .finance-mode-btn span {
+    font-size: 11px;
+  }
+
+  .finance-mode-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .summary-carousel .summary-card {
+    min-height: 120px;
+  }
+}

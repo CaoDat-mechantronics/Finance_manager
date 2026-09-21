@@ -88,6 +88,17 @@
         </div>
 
         <div class="topbar-actions">
+          <div class="finance-mode-switch" id="financeModeSwitch" aria-label="Chế độ quản lý tài chính">
+            <button class="finance-mode-btn active" type="button" data-finance-mode="personal">
+              <i data-lucide="user-round"></i>
+              <span>Cá nhân</span>
+            </button>
+            <button class="finance-mode-btn" type="button" data-finance-mode="group">
+              <i data-lucide="users-round"></i>
+              <span>Nhóm</span>
+            </button>
+          </div>
+
           <label class="month-picker">
             <i data-lucide="calendar-days"></i>
             <input type="month" id="monthFilter" />
@@ -100,7 +111,12 @@
         </div>
       </header>
 
-      <section class="summary-grid">
+      <section class="summary-carousel" aria-label="Tổng quan tài chính">
+        <button class="summary-scroll-btn prev hidden" id="summaryPrevBtn" type="button" aria-label="Xem thẻ trước">
+          <i data-lucide="chevron-left"></i>
+        </button>
+
+        <div class="summary-grid" id="summaryScroller">
         <article class="summary-card balance">
           <div class="card-title-row">
             <span>Số dư hiện tại</span>
@@ -147,6 +163,22 @@
           </div>
           <small id="budgetText">0% ngân sách đã dùng</small>
         </article>
+
+        <article class="summary-card debt hidden" id="debtSummaryCard">
+          <div class="card-title-row">
+            <span>Tổng dư nợ</span>
+            <div class="summary-icon">
+              <i data-lucide="landmark"></i>
+            </div>
+          </div>
+          <strong id="debtValue">0 ₫</strong>
+          <small>Các khoản nợ chưa thanh toán</small>
+        </article>
+        </div>
+
+        <button class="summary-scroll-btn next hidden" id="summaryNextBtn" type="button" aria-label="Xem thẻ tiếp theo">
+          <i data-lucide="chevron-right"></i>
+        </button>
       </section>
 
       <section class="content-grid">

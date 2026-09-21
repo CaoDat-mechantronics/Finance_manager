@@ -5,35 +5,23 @@ import {
 } from "./storageService.js";
 
 /**
- * Đây là tầng dữ liệu duy nhất mà UI nên gọi.
- *
- * Hiện tại:
- * - useLocalDemo = true -> dùng localStorage.
- *
- * Khi nối FastAPI:
- * - đổi APP_CONFIG.useLocalDemo = false
- * - hoàn thiện các request fetch bên dưới.
- *
- * Khi nối Firebase Auth:
- * - lấy Firebase ID token và truyền qua Authorization header.
+ * Tầng dữ liệu giao dịch.
+ * `mode` nhận "personal" hoặc "group" để tách riêng hai phạm vi dữ liệu.
  */
-
 async function getAuthHeaders() {
   return {
     "Content-Type": "application/json",
   };
 }
 
-export async function getTransactions() {
+export async function getTransactions(mode = "personal") {
   if (APP_CONFIG.useLocalDemo) {
-    return loadTransactionsFromStorage();
+    return loadTransactionsFromStorage(mode);
   }
 
   const response = await fetch(
-    `${APP_CONFIG.apiBaseUrl}/transactions`,
-    {
-      headers: await getAuthHeaders(),
-    }
+    `${APP_CONFIG.apiBaseUrl}/transactions?scope=${encodeURIComponent(mode)}`,
+    { headers: await getAuthHeaders() }
   );
 
   if (!response.ok) {
@@ -43,10 +31,14 @@ export async function getTransactions() {
   return response.json();
 }
 
-export async function createTransaction(transaction, currentTransactions) {
+export async function createTransaction(
+  transaction,
+  currentTransactions,
+  mode = "personal"
+) {
   if (APP_CONFIG.useLocalDemo) {
     const updated = [...currentTransactions, transaction];
-    saveTransactionsToStorage(updated);
+    saveTransactionsToStorage(updated, mode);
     return transaction;
   }
 
@@ -55,7 +47,7 @@ export async function createTransaction(transaction, currentTransactions) {
     {
       method: "POST",
       headers: await getAuthHeaders(),
-      body: JSON.stringify(transaction),
+      body: JSON.stringify({ ...transaction, scope: mode }),
     }
   );
 
@@ -66,18 +58,19 @@ export async function createTransaction(transaction, currentTransactions) {
   return response.json();
 }
 
-export async function deleteTransaction(id, currentTransactions) {
+export async function deleteTransaction(
+  id,
+  currentTransactions,
+  mode = "personal"
+) {
   if (APP_CONFIG.useLocalDemo) {
-    const updated = currentTransactions.filter(
-      (item) => item.id !== id
-    );
-
-    saveTransactionsToStorage(updated);
+    const updated = currentTransactions.filter((item) => item.id !== id);
+    saveTransactionsToStorage(updated, mode);
     return;
   }
 
   const response = await fetch(
-    `${APP_CONFIG.apiBaseUrl}/transactions/${id}`,
+    `${APP_CONFIG.apiBaseUrl}/transactions/${id}?scope=${encodeURIComponent(mode)}`,
     {
       method: "DELETE",
       headers: await getAuthHeaders(),

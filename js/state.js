@@ -3,6 +3,8 @@ const state = {
   selectedMonth: "",
   typeFilter: "all",
   searchText: "",
+  financeMode: "personal",
+  debtTotal: 0,
 };
 
 export function getState() {
@@ -31,4 +33,15 @@ export function setTypeFilter(type) {
 
 export function setSearchText(text) {
   state.searchText = text;
+}
+
+export function setFinanceMode(mode) {
+  state.financeMode = mode === "group" ? "group" : "personal";
+}
+
+export function setDebtTotal(value) {
+  const numberValue = Number(value);
+  state.debtTotal = Number.isFinite(numberValue) && numberValue > 0
+    ? numberValue
+    : 0;
 }

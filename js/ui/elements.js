@@ -3,6 +3,9 @@ export const els = {
   sidebarOverlay: document.getElementById("sidebarOverlay"),
   menuBtn: document.getElementById("menuBtn"),
 
+  financeModeSwitch: document.getElementById("financeModeSwitch"),
+  financeModeButtons: document.querySelectorAll("[data-finance-mode]"),
+
   openTransactionBtn: document.getElementById("openTransactionBtn"),
   mobileAddBtn: document.getElementById("mobileAddBtn"),
 
@@ -21,6 +24,10 @@ export const els = {
   typeFilter: document.getElementById("typeFilter"),
   searchInput: document.getElementById("searchInput"),
 
+  summaryScroller: document.getElementById("summaryScroller"),
+  summaryPrevBtn: document.getElementById("summaryPrevBtn"),
+  summaryNextBtn: document.getElementById("summaryNextBtn"),
+
   transactionList: document.getElementById("transactionList"),
   emptyState: document.getElementById("emptyState"),
 
@@ -30,6 +37,8 @@ export const els = {
   budgetRemainValue: document.getElementById("budgetRemainValue"),
   budgetProgress: document.getElementById("budgetProgress"),
   budgetText: document.getElementById("budgetText"),
+  debtSummaryCard: document.getElementById("debtSummaryCard"),
+  debtValue: document.getElementById("debtValue"),
 
   categoryLegend: document.getElementById("categoryLegend"),
 };

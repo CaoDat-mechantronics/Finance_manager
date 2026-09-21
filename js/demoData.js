@@ -1,6 +1,35 @@
 import { todayOffset } from "./utils.js";
 
-export function createSeedTransactions() {
+export function createSeedTransactions(mode = "personal") {
+  if (mode === "group") {
+    return [
+      {
+        id: crypto.randomUUID(),
+        type: "income",
+        amount: 8_000_000,
+        category: "other",
+        description: "Đóng góp quỹ nhóm",
+        date: todayOffset(-10),
+      },
+      {
+        id: crypto.randomUUID(),
+        type: "expense",
+        amount: 1_250_000,
+        category: "food",
+        description: "Ăn uống nhóm",
+        date: todayOffset(-4),
+      },
+      {
+        id: crypto.randomUUID(),
+        type: "expense",
+        amount: 450_000,
+        category: "transport",
+        description: "Di chuyển chung",
+        date: todayOffset(-2),
+      },
+    ];
+  }
+
   return [
     {
       id: crypto.randomUUID(),

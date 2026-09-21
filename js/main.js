@@ -4,11 +4,13 @@ import {
   bindModalEvents,
   closeTransactionModal,
 } from "./ui/modal.js";
+import { bindSummaryScrollerEvents } from "./ui/summaryScroller.js";
 import { refreshIcons } from "./utils.js";
 
 async function bootstrap() {
   bindSidebarEvents();
   bindModalEvents();
+  bindSummaryScrollerEvents();
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {

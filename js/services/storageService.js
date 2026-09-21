@@ -1,8 +1,22 @@
 import { APP_CONFIG } from "../config.js";
 import { createSeedTransactions } from "../demoData.js";
 
-export function loadTransactionsFromStorage() {
-  const saved = localStorage.getItem(APP_CONFIG.storageKey);
+function getScopedStorageKey(mode) {
+  return `${APP_CONFIG.storageKey}_${mode}`;
+}
+
+export function loadTransactionsFromStorage(mode = "personal") {
+  const scopedKey = getScopedStorageKey(mode);
+  let saved = localStorage.getItem(scopedKey);
+
+  // Tự động giữ lại dữ liệu từ phiên bản cũ và xem nó là dữ liệu cá nhân.
+  if (!saved && mode === "personal") {
+    const legacySaved = localStorage.getItem(APP_CONFIG.storageKey);
+    if (legacySaved) {
+      saved = legacySaved;
+      localStorage.setItem(scopedKey, legacySaved);
+    }
+  }
 
   if (saved) {
     try {
@@ -12,14 +26,14 @@ export function loadTransactionsFromStorage() {
     }
   }
 
-  const seed = createSeedTransactions();
-  saveTransactionsToStorage(seed);
+  const seed = createSeedTransactions(mode);
+  saveTransactionsToStorage(seed, mode);
   return seed;
 }
 
-export function saveTransactionsToStorage(transactions) {
+export function saveTransactionsToStorage(transactions, mode = "personal") {
   localStorage.setItem(
-    APP_CONFIG.storageKey,
+    getScopedStorageKey(mode),
     JSON.stringify(transactions)
   );
 }
